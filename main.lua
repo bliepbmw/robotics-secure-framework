@@ -2,8 +2,13 @@ local Controller = require("src.core.controller")
 local MotorController = require("src.modules.motor_controller")
 local SensorHandler = require("src.modules.sensor_handler")
 local IntegrityCheck = require("src.security.integrity_check")
+local Hardware = require("src.hal.hardware")
+local Logger = require("src.utils.logger")
+local Config = require("config")
 
 math.randomseed(os.time())
+
+Hardware:init()
 
 local controller = Controller:new()
 local motor = MotorController
@@ -15,10 +20,11 @@ security:run()
 
 local distance = sensor:read_distance()
 
-if distance < 20 then
+if sensor:is_obstacle(distance) then
     motor:stop()
 else
-    motor:set_speed(50, 50)
+    local speed = motor:pid_control(50, distance)
+    motor:set_speed(speed)
 end
 
 controller:start()
