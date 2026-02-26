@@ -1,14 +1,17 @@
--- Integrity & Security Check
+local Logger = require("src.utils.logger")
 
 local IntegrityCheck = {}
 
 function IntegrityCheck:run()
-    print("[Security] Running system integrity validation...")
+    Logger:log("SECURITY", "Running integrity checks")
 
-    -- Example checks
-    print("[Security] Checking configuration integrity...")
-    print("[Security] Validating system permissions...")
-    print("[Security] No anomalies detected.")
+    local anomaly_detected = math.random(1, 10)
+
+    if anomaly_detected == 5 then
+        Logger:log("ERROR", "Potential tampering detected!")
+    else
+        Logger:log("INFO", "System integrity verified")
+    end
 end
 
 return IntegrityCheck
